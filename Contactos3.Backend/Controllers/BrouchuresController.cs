@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using Contactos3.Backend.Models;
-using Contactos3.Domain.Models;
-
-namespace Contactos3.Backend.Controllers
+﻿namespace Contactos3.Backend.Controllers
 {
+    using System.Data.Entity;
+    using System.Threading.Tasks;
+    using System.Net;
+    using System.Web.Mvc;
+    using Contactos3.Backend.Models;
+    using Contactos3.Domain.Models;
+    using Contactos3.Backend.Helpers;
+    using System;
+
+    [Authorize]
     public class BrouchuresController : Controller
     {
         private DataContextLocal db = new DataContextLocal();
@@ -50,17 +48,43 @@ namespace Contactos3.Backend.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "BrouchureId,PerfilId,BrochureDescription,LastUpdate")] Brouchure brouchure)
+        //public async Task<ActionResult> Create([Bind(Include = "BrouchureId,PerfilId,BrochureDescription,LastUpdate")] Brouchure brouchure)
+        public async Task<ActionResult> Create(BrouchureView view)
         {
             if (ModelState.IsValid)
             {
+                var pic = string.Empty;
+                var folder = "~/Content/BrouchureImage";
+
+                if (view.ImageBrouchureFile != null)
+                {
+                    pic = FilesHelper.UploadPhoto(view.ImageBrouchureFile, folder);
+                    pic = string.Format("{0}/{1}", folder, pic);
+                }
+
+                var brouchure = ToBrouchure(view);
+                brouchure.BrouchureImage = pic;
                 db.Brouchures.Add(brouchure);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.PerfilId = new SelectList(db.Perfils, "PerfilId", "Name", brouchure.PerfilId);
-            return View(brouchure);
+            ViewBag.PerfilId = new SelectList(db.Perfils, "PerfilId", "Name", view.PerfilId);
+            return View(view);
+        }
+
+        private Brouchure ToBrouchure(BrouchureView view)
+        {
+            return new Brouchure
+            {
+                BrochureDescription = view.BrochureDescription,
+                BrouchureId = view.BrouchureId,
+                BrouchureImage = view.BrouchureImage,
+                LastUpdate = view.LastUpdate,
+                PerfilId = view.PerfilId,
+                Perfil = view.Perfil,
+
+            };
         }
 
         // GET: Brouchures/Edit/5
@@ -70,13 +94,29 @@ namespace Contactos3.Backend.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Brouchure brouchure = await db.Brouchures.FindAsync(id);
+            var  brouchure = await db.Brouchures.FindAsync(id);
             if (brouchure == null)
             {
                 return HttpNotFound();
             }
             ViewBag.PerfilId = new SelectList(db.Perfils, "PerfilId", "Name", brouchure.PerfilId);
-            return View(brouchure);
+
+            var view = ToView(brouchure);
+            return View(view);
+        }
+
+        private BrouchureView ToView(Brouchure brouchure)
+        {
+            return new BrouchureView
+            {
+                BrochureDescription = brouchure.BrochureDescription,
+                BrouchureId = brouchure.BrouchureId,
+                BrouchureImage = brouchure.BrouchureImage,
+                LastUpdate = brouchure.LastUpdate,
+                PerfilId = brouchure.PerfilId,
+                Perfil = brouchure.Perfil,
+
+            };
         }
 
         // POST: Brouchures/Edit/5
@@ -84,16 +124,27 @@ namespace Contactos3.Backend.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "BrouchureId,PerfilId,BrochureDescription,LastUpdate")] Brouchure brouchure)
+        public async Task<ActionResult> Edit(BrouchureView view)
         {
             if (ModelState.IsValid)
             {
+                var pic = view.BrouchureImage;
+                var folder = "~/Content/BrouchureImage";
+
+                if (view.ImageBrouchureFile != null)
+                {
+                    pic = FilesHelper.UploadPhoto(view.ImageBrouchureFile, folder);
+                    pic = string.Format("{0}/{1}", folder, pic);
+                }
+
+                var brouchure = ToBrouchure(view);
+                brouchure.BrouchureImage = pic;
                 db.Entry(brouchure).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.PerfilId = new SelectList(db.Perfils, "PerfilId", "Name", brouchure.PerfilId);
-            return View(brouchure);
+            ViewBag.PerfilId = new SelectList(db.Perfils, "PerfilId", "Name", view.PerfilId);
+            return View(view);
         }
 
         // GET: Brouchures/Delete/5

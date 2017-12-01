@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using Contactos3.Backend.Models;
-using Contactos3.Domain.Models;
-
+﻿
 namespace Contactos3.Backend.Controllers
 {
+    using System.Data.Entity;
+    using System.Threading.Tasks;
+    using System.Net;
+    using System.Web.Mvc;
+    using Contactos3.Backend.Models;
+    using Contactos3.Domain.Models;
+
+    [Authorize]
     public class JobsController : Controller
     {
         private DataContextLocal db = new DataContextLocal();

@@ -18,6 +18,11 @@
             get;
             set;
         }
+        public string BrouchureImage
+        {
+            get;
+            set;
+        }
         public string BrochureDescription
         {
             get;
