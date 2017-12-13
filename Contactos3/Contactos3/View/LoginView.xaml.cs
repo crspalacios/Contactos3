@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
-namespace Contactos3
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace Contactos3.View
 {
-    public partial class MainPage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class LoginView : ContentPage
     {
-        public MainPage()
+        public LoginView()
         {
             InitializeComponent();
         }

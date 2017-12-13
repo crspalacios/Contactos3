@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Contactos3.View.InfoContactsView"
+    BindingContext="{Binding Main, Source={StaticResource Locator}}"
+             Title="Informacion del Contacto">
+    
+    <ContentPage.Content>
+        <StackLayout
+            BindingContext="{Binding InfoContacts}"
+            Padding="8">
+            <ListView 
+                ItemsSource="{Binding Phones}" 
+                HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid
+                                ColumnSpacing="4"
+                                RowSpacing="0">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    HorizontalOptions="StartAndExpand"
+                                    VerticalOptions="Center"
+                                    Text="{Binding DescriptionPhone}"/>
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    HorizontalOptions="StartAndExpand"
+                                    VerticalOptions="Center"
+                                    Text="{Binding PhoneNumber}"/>
+
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

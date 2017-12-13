@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin.Abstractions"
+             x:Class="Contactos3.View.PerfilsView"
+             BindingContext="{Binding Main, Source={StaticResource Locator}}"
+             Title="Contactos">
+            <ContentPage.ToolbarItems>
+                <ToolbarItem Icon="ic_action_add"
+                             Command="{Binding NewContactCommand}"/>
+            </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout
+            BindingContext="{Binding Perfils}"
+           
+            Padding="8">
+            <ListView 
+                ItemsSource="{Binding Perfils}" 
+                HasUnevenRows="True">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid
+                                ColumnSpacing="4"
+                                RowSpacing="0">
+                                
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <controls:CircleImage
+                                    Aspect="AspectFill"
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Source="{Binding ImagePerfilFullPath}"
+                                    WidthRequest="25"
+                                    HeightRequest="25">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="ViewImagePerfil"/>
+                                    </Image.GestureRecognizers>
+                                </controls:CircleImage>
+
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    HorizontalOptions="StartAndExpand"
+                                    VerticalOptions="Center"
+                                    Text="{Binding Name}"/>
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    HorizontalOptions="StartAndExpand"
+                                    VerticalOptions="Center"
+                                    Text="{Binding LastName}"/>
+                                <Label 
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="1"
+                                    FontAttributes="Italic"
+                                    FontSize="Micro"
+                                    Text="Director de proyecto en Crealo Digital SAS"/>
+                                <Image
+                                    Grid.Row="0"
+                                    Grid.Column="3"
+                                    Source="ic_chevron_right"
+                                    HorizontalOptions="End">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding SelectPerfilCommand}"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

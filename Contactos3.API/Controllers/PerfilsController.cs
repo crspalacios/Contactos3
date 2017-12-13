@@ -10,6 +10,8 @@ namespace Contactos3.API.Controllers
     using System.Web.Http.Description;
     using Contactos3.Domain;
     using Contactos3.Domain.Models;
+    using System.Collections.Generic;
+    using Contactos3.API.Models;
 
     [Authorize]
     public class PerfilsController : ApiController
@@ -17,9 +19,109 @@ namespace Contactos3.API.Controllers
         private DataContext db = new DataContext();
 
         // GET: api/Perfils
-        public IQueryable<Perfil> GetPerfils()
+        public async Task<IHttpActionResult> GetPerfils()
         {
-            return db.Perfils;
+            var perfils = await db.Perfils.ToListAsync();
+            var perfilsResponse = new List<PerfilResponse>();
+
+            foreach(var perfil in perfils)
+            {
+                var addressResponse = new List<AddressResponse>();
+                foreach (var address in perfil.Addresses)
+                {
+                    addressResponse.Add(new AddressResponse
+                    {
+                        AddressId = address.AddressId,
+                        DescriptionAddress = address.DescriptionAddress,
+                        NameAddress = address.NameAddress,
+                        Ubications = address.Ubications,
+                    });
+                }
+                var brouchureResponse = new List<BrouchureResponse>();
+                foreach (var brouchure in perfil.Brouchures)
+                {
+                    brouchureResponse.Add(new BrouchureResponse
+                    {
+                        BrouchureId = brouchure.BrouchureId,
+                        BrochureDescription = brouchure.BrochureDescription,
+                        BrouchureImage = brouchure.BrouchureImage,
+                        LastUpdate = brouchure.LastUpdate,
+                    });
+                }
+                var emailResponse = new List<EmailResponse>();
+                foreach (var email in perfil.Emails)
+                {
+                    emailResponse.Add(new EmailResponse
+                    {
+                        DescriptionEmail = email.DescriptionEmail,
+                        EmailId = email.EmailId,
+                        NameEmail = email.NameEmail,
+
+                    });
+                }
+                var jobResponse = new List<JobResponse>();
+                foreach (var job in perfil.Jobs)
+                {
+                    jobResponse.Add(new JobResponse
+                    {
+                        JobId = job.JobId,
+                        JobCompany = job.JobCompany,
+                        JobPosition = job.JobPosition,
+                        LastUpdate = job.LastUpdate,
+                    });
+                }
+                var phoneResponse = new List<PhoneResponse>();
+                foreach (var phone in perfil.Phones)
+                {
+                    phoneResponse.Add(new PhoneResponse
+                    {
+                        PhoneId = phone.PhoneId,
+                        DescriptionPhone = phone.DescriptionPhone,
+                        PhoneNumber = phone.PhoneNumber,
+                        LastUpdate = phone.LastUpdate,
+                    });
+                }
+                var socialResponse = new List<SocialResponse>();
+                foreach (var social in perfil.Socials)
+                {
+                    socialResponse.Add(new SocialResponse
+                    {
+                        SocialiD = social.SocialiD,
+                        SocialDescription = social.SocialDescription,
+                        SocialPerfil = social.SocialPerfil,
+                    });
+                }
+                var urlResponse = new List<UrlResponse>();
+                foreach (var url in perfil.Urls)
+                {
+                    urlResponse.Add(new UrlResponse
+                    {
+                        UrlId = url.UrlId,
+                        DescriptionUrl = url.DescriptionUrl,
+                        NameUrl = url.NameUrl,
+                    });
+                }
+
+
+                perfilsResponse.Add(new PerfilResponse
+                {
+
+                    PerfilId = perfil.PerfilId,
+                    Name = perfil.Name,
+                    LastName = perfil.LastName,
+                    ImagePerfil = perfil.ImagePerfil,
+                    Phones  = phoneResponse,
+                    Addresses = addressResponse,
+                    Brouchures = brouchureResponse,
+                    Emails = emailResponse,
+                    Jobs = jobResponse,
+                    Socials = socialResponse,
+                    Urls = urlResponse,
+     
+
+                });
+            }
+            return Ok(perfilsResponse);
         }
 
         // GET: api/Perfils/5

@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Contactos3.View.NewContactView"
+             BindingContext="{Binding Main, Source={StaticResource Locator}}"
+             Title="Solo on 7 pasos">
+    <ContentPage.Content>
+        <StackLayout
+            BindingContext="{Binding NewContacts}"
+            Padding="8">
+
+            <Label
+                Text="Tus Nmobres:"></Label>
+            
+            <Entry
+                Placeholder="No uses alias"
+                Text="{Binding Name, Mode=TwoWay}"></Entry>
+            
+            <Label
+                Text="Tus apellidos:"></Label>
+            
+            <Entry
+                Placeholder="Asi te encontraran facil"
+                Text="{Binding LastName, Mode=TwoWay}"></Entry>
+            
+            <Label
+                Text="Usa una foto"></Label>
+
+            <Image
+                HeightRequest="200"
+                Source="{Binding ImageSource}"
+                WidthRequest="200">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ChangeImageCommand}"/>
+                            </Image.GestureRecognizers>
+            </Image>
+
+
+            <ActivityIndicator
+                IsRunning="{Binding IsRunning, Mode=TwoWay}"></ActivityIndicator>
+
+            <Button
+                Command="{Binding SaveCommand}"
+                BackgroundColor="#0B615E"
+                BorderRadius="23"
+                IsEnabled="{Binding IsEnabled,Mode=TwoWay}"
+                Margin="50,0"
+                HeightRequest="46"
+                Text="Login"></Button>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
